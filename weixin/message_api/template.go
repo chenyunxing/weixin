@@ -4,6 +4,7 @@ package message_api
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/lixinio/weixin/utils"
 )
@@ -34,12 +35,13 @@ type TemplateMessageData struct {
 }
 
 type TemplateMessage struct {
-	ToUser      string                          `json:"touser,omitempty"`        // 接收者openid
-	TemplateID  string                          `json:"template_id"`             // 模板ID
-	URL         string                          `json:"url,omitempty"`           // 模板跳转链接（海外帐号没有跳转能力）
-	MiniProgram *TemplateMessageMp              `json:"miniprogram,omitempty"`   // 跳小程序所需数据，不需跳小程序可不用传该数据
-	ClientMsgID string                          `json:"client_msg_id,omitempty"` // 防重入id。对于同一个openid + client_msg_id, 只发送一条消息,10分钟有效,超过10分钟不保证效果。若无防重入需求，可不填
-	Datas       map[string]*TemplateMessageData `json:"data"`                    // 模板数据
+	ToUser       string                          `json:"touser,omitempty"`        // 接收者openid
+	TemplateID   string                          `json:"template_id"`             // 模板ID
+	URL          string                          `json:"url,omitempty"`           // 模板跳转链接（海外帐号没有跳转能力）
+	MiniProgram  *TemplateMessageMp              `json:"miniprogram,omitempty"`   // 跳小程序所需数据，不需跳小程序可不用传该数据
+	ClientMsgID  string                          `json:"client_msg_id,omitempty"` // 防重入id。对于同一个openid + client_msg_id, 只发送一条消息,10分钟有效,超过10分钟不保证效果。若无防重入需求，可不填
+	Datas        map[string]*TemplateMessageData `json:"data"`                    // 模板数据
+	KeywordNames []*string                       `json:"keyword_name_list"`       // 关键词
 }
 
 /*
@@ -103,15 +105,19 @@ func (api *MessageApi) GetIndustry(ctx context.Context) (*IndustryInfo, error) {
 https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Interface.html
 */
 func (api *MessageApi) AddTemplate(
-	ctx context.Context, templateIdShort string,
+	ctx context.Context, templateIdShort string, keyword_names []*string,
 ) (string, error) {
 	resp := &struct {
 		utils.WeixinError
 		TemplateID string `json:"template_id"`
 	}{}
-
+	keyword_names_byte, err := json.Marshal(keyword_names)
+	if err != nil {
+		return "", err
+	}
 	if err := api.Client.HTTPPostJson(ctx, apiAddTemplate, map[string]string{
 		"template_id_short": templateIdShort,
+		"keyword_name_list": string(keyword_names_byte),
 	}, resp); err != nil {
 		return "", err
 	}
