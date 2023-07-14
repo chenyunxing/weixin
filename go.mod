@@ -1,4 +1,4 @@
-module github.com/lixinio/weixin
+module github.com/chenyunxing/weixin
 
 go 1.15
 
