@@ -111,7 +111,7 @@ func TestPrivateTemplate(t *testing.T) {
 		initOfficialAccount(),
 	} {
 		messageApi := NewApi(client.Client)
-		templateID, err := messageApi.AddTemplate(ctx, "TM00210")
+		templateID, err := messageApi.AddTemplate(ctx, "TM00210", []string{"时间", "地点"})
 		require.Equal(t, nil, err)
 		fmt.Println(templateID)
 
