@@ -41,7 +41,7 @@ type TemplateMessage struct {
 	MiniProgram  *TemplateMessageMp              `json:"miniprogram,omitempty"`   // 跳小程序所需数据，不需跳小程序可不用传该数据
 	ClientMsgID  string                          `json:"client_msg_id,omitempty"` // 防重入id。对于同一个openid + client_msg_id, 只发送一条消息,10分钟有效,超过10分钟不保证效果。若无防重入需求，可不填
 	Datas        map[string]*TemplateMessageData `json:"data"`                    // 模板数据
-	KeywordNames []*string                       `json:"keyword_name_list"`       // 关键词
+	KeywordNames []string                        `json:"keyword_name_list"`       // 关键词
 }
 
 /*
