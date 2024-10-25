@@ -49,10 +49,12 @@ func (api *WxaApi) GenerateUrlLink(
 	return result.UrlLink, nil
 }
 
-/**
+/*
+*
 查询小程序 url_link 配置，及长期有效 quota。
 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/url-link/urllink.query.html
-**/
+*
+*/
 type UrlLinkInfo struct {
 	UrlLinkInfo struct {
 		AppID      string `json:"appid"`
@@ -85,19 +87,22 @@ func (api *WxaApi) GetUrlLink(
 	return &result.UrlLinkInfo, nil
 }
 
-/**
+/*
+*
 获取小程序 scheme 码，适用于短信、邮件、外部网页、微信内等拉起小程序的业务场景。
 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/url-scheme/urlscheme.generate.html
 https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/2.0/api/Business/url_scheme.html
-**/
+*
+*/
 type GenerateSchemeRequest struct {
 	JumpWxa *struct {
 		Path       string `json:"path"`
 		Query      string `json:"query,omitempty"`
 		EnvVersion string `json:"env_version,omitempty"`
 	} `json:"jump_wxa"`
-	IsExpire   bool  `json:"is_expire"`
-	ExpireTime int64 `json:"expire_time,omitempty"`
+	ExpireTime     int64 `json:"expire_time,omitempty"`
+	ExpireType     int64 `json:"expire_type,omitempty"`
+	ExpireInterval int64 `json:"expire_interval,omitempty"`
 }
 
 func (api *WxaApi) GenerateScheme(
@@ -113,10 +118,12 @@ func (api *WxaApi) GenerateScheme(
 	return result.OpenLink, nil
 }
 
-/**
+/*
+*
 查询小程序 scheme 码，及长期有效 quota。
 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/url-scheme/urlscheme.query.html
-**/
+*
+*/
 type SchemaInfo struct {
 	SchemeInfo struct {
 		AppID      string `json:"appid"`
